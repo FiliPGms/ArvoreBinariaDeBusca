@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "arvore.h"
-#include <Pedido.h>
+
 
 // Definicao da estrutura da arvore binaria de busca
 struct t_arvore {
