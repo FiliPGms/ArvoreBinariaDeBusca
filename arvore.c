@@ -6,7 +6,7 @@
 
 // Definicao da estrutura da arvore binaria de busca
 struct t_arvore {
-    int chave; // chave de busca, por exemplo um id de Cliente
+    int chave; // ID do Pedido
     void * dados; // ponteiro para dados adicionais na lista (opcional)
     ABB* esquerda; // ponteiro para subarvore esquerda
     ABB* direita; // ponteiro para subarvore direita

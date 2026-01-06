@@ -5,7 +5,7 @@
 #include <ctype.h>
 
 #define QTD_REGISTROS 10000
-#define ARQUIVO_SAIDA "clientes.txt" // adapte o nome do arquivo conforme necessário
+#define ARQUIVO_SAIDA "pedidos.txt" // adapte o nome do arquivo conforme necessário
 
 
 // Bancos de palavras para gerar nomes aleatórios
