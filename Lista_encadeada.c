@@ -3,7 +3,7 @@
 #include "Lista.h"  
 
 typedef struct t_no{
-    int dado;
+    void* dado;
     No* proximo;
     No* anterior;
 }No;
@@ -34,4 +34,23 @@ void liberarLista(Lista* ptr_l){
         free(temp);
     }
     free(ptr_l);
+}
+
+int inserir(Lista* prt_l, void*dado){
+    if(prt_l->tamanho = prt_l->capacidade) return 0; //minha lista tá cheia
+    No* novo_no = (No*)malloc(sizeof(No));
+    novo_no->dado = dado;
+    if(prt_l->ultimo != NULL){
+        prt_l->ultimo->proximo = novo_no;
+        novo_no->anterior = prt_l->ultimo;
+        novo_no->proximo = NULL;
+    }else{
+        prt_l->primeiro = novo_no;
+        novo_no->anterior = NULL;
+        novo_no->proximo = NULL;
+    }
+
+    prt_l->ultimo = novo_no;
+    prt_l->tamanho++;
+    return 1;
 }
