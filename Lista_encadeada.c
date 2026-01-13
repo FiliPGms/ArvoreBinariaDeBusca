@@ -54,3 +54,63 @@ int inserir(Lista* prt_l, void*dado){
     prt_l->tamanho++;
     return 1;
 }
+
+int remover(Lista* ptr_l, int posicao){
+    if(posicao<0 || posicao >= ptr_l->tamanho) return 0;
+    No* atual = ptr_l->primeiro;
+    for(int i=0;i<posicao;i++){
+        atual = atual->proximo;
+    }
+
+    if(atual->anterior!=NULL){
+        atual->anterior->proximo = atual->proximo;
+    }else{
+        ptr_l->primeiro = atual->proximo;
+    }
+    
+    if(atual->proximo != NULL){
+        atual->proximo->anterior = atual->anterior;
+    }else{
+        ptr_l->ultimo = atual->anterior;
+    }
+
+    free(atual);
+    ptr_l->tamanho--;
+    return 1;
+}
+
+void* obter(Lista* ptr_l, int posicao){
+    if(posicao<0 || posicao >= ptr_l->tamanho) return NULL;
+    No* atual = ptr_l->primeiro;
+    for(int i=0;i<posicao;i++){
+        atual = atual->proximo;
+    }
+
+    return atual->dado;
+}
+
+int cheia(Lista* ptr_l){
+    if(ptr_l->tamanho >= ptr_l->capacidade) return 1;
+    else return 0;
+}
+
+int vazia(Lista* ptr_l){
+    if(ptr_l->tamanho == 0) return 1;
+    else return 0;
+}
+
+int tamanho(Lista* ptr_l){
+    return ptr_l->tamanho;
+}
+
+int capacidade(Lista* ptr_l){
+    return ptr_l->capacidade;
+}
+
+void imprimir(Lista* ptr_l, void (*imprimir_dado)(void* dado)){
+    No* atual = ptr_l->primeiro;
+    while(atual != NULL){
+        imprimir_dado(atual->dado);
+        atual = atual->proximo;
+    }
+}
