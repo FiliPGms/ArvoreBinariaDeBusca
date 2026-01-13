@@ -4,9 +4,9 @@
 typedef struct pedido Pedido;
 
 // basicas
-Pedido* cadastrarPedido(int idPedido,char observacao[],char nomeCliente[],char nomePedido[] ,double valor);
+Pedido* criarPedido(int idPedido,char observacao[],char nomeCliente[],char nomePedido[] ,double valor);
 void  excluirPedido(Pedido* ptr_p);
-void imprimirPedido(const Pedido* ptr_p);
+void imprimirPedido(void* dado);
 
 //getters
 int obterIdPedido(Pedido* ptr_p);

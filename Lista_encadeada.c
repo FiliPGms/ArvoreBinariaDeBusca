@@ -4,41 +4,42 @@
 
 typedef struct t_no{
     void* dado;
-    No* proximo;
-    No* anterior;
+    struct t_no* proximo;
+    struct t_no* anterior;
 }No;
 
 struct t_lista
 {
     No* primeiro;
     No* ultimo;
-    int tamanho;
-    int capacidade;
+    int qtd;
 };
 
-Lista* criarLista(int capacidade){
+Lista* criarLista(){
     Lista* lista = (Lista*)malloc(sizeof(Lista));
-    lista->capacidade = capacidade;
-    lista->primeiro = NULL;
-    lista->ultimo = NULL;
-    lista->tamanho = 0;
+    if(lista != NULL){
+        lista->primeiro = NULL;
+        lista->ultimo = NULL;
+        lista->qtd = 0;
+    }
     return lista;
 }
 
 void liberarLista(Lista* ptr_l){
+    if(ptr_l == NULL) return;
     No* atual = ptr_l->primeiro;
     while (atual!=NULL)
     {
         No* temp = atual;
-        atual = ptr_l->primeiro->proximo;
+        atual = atual->proximo;
         free(temp);
     }
     free(ptr_l);
 }
 
 int inserir(Lista* prt_l, void*dado){
-    if(prt_l->tamanho = prt_l->capacidade) return 0; //minha lista tá cheia
     No* novo_no = (No*)malloc(sizeof(No));
+    if(novo_no == NULL) return 0;
     novo_no->dado = dado;
     if(prt_l->ultimo != NULL){
         prt_l->ultimo->proximo = novo_no;
@@ -51,12 +52,13 @@ int inserir(Lista* prt_l, void*dado){
     }
 
     prt_l->ultimo = novo_no;
-    prt_l->tamanho++;
+    prt_l->qtd++;
     return 1;
 }
 
 int remover(Lista* ptr_l, int posicao){
-    if(posicao<0 || posicao >= ptr_l->tamanho) return 0;
+    if(ptr_l == NULL) return 0;
+    if(posicao<0 || posicao >= ptr_l->qtd) return 0;
     No* atual = ptr_l->primeiro;
     for(int i=0;i<posicao;i++){
         atual = atual->proximo;
@@ -75,12 +77,15 @@ int remover(Lista* ptr_l, int posicao){
     }
 
     free(atual);
-    ptr_l->tamanho--;
+    ptr_l->qtd--;
     return 1;
 }
 
 void* obter(Lista* ptr_l, int posicao){
-    if(posicao<0 || posicao >= ptr_l->tamanho) return NULL;
+    if(ptr_l == NULL){
+        printf("lista vazia!");
+    }
+    if(posicao<0 || posicao >= ptr_l->qtd) return NULL;
     No* atual = ptr_l->primeiro;
     for(int i=0;i<posicao;i++){
         atual = atual->proximo;
@@ -90,27 +95,33 @@ void* obter(Lista* ptr_l, int posicao){
 }
 
 int cheia(Lista* ptr_l){
-    if(ptr_l->tamanho >= ptr_l->capacidade) return 1;
-    else return 0;
+     return 0;
 }
 
 int vazia(Lista* ptr_l){
-    if(ptr_l->tamanho == 0) return 1;
-    else return 0;
+    if(ptr_l == NULL) return 1;
 }
 
-int tamanho(Lista* ptr_l){
-    return ptr_l->tamanho;
+int quantidade(Lista* ptr_l){
+    if(ptr_l == NULL) return 0;
+    return ptr_l->qtd;
 }
 
-int capacidade(Lista* ptr_l){
-    return ptr_l->capacidade;
-}
 
-void imprimir(Lista* ptr_l, void (*imprimir_dado)(void* dado)){
+void imprimirLista(Lista* ptr_l, void (*imprimir_dado)(void* dado)){
+    if(ptr_l == NULL) return; // fila vazia
     No* atual = ptr_l->primeiro;
     while(atual != NULL){
         imprimir_dado(atual->dado);
         atual = atual->proximo;
     }
+}
+
+void* mostraAnterior(Lista* ptr_l, int posicao){
+    if(posicao<=0 || posicao >= ptr_l->qtd) return NULL;
+    No* atual = ptr_l->primeiro;
+    for(int i=0;i<posicao;i++){
+        atual = atual->proximo;
+    }
+    return atual->anterior->dado;
 }

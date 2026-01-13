@@ -12,7 +12,7 @@ struct pedido {
     double valor;
 };
 
-Pedido* cadastrarPedido(int idPedido, char observacao[], char nomeCliente[], char nomePedido[],double valor) 
+Pedido* criarPedido(int idPedido, char observacao[], char nomeCliente[], char nomePedido[],double valor) 
 {
     Pedido* ptr_p = (Pedido*) malloc(sizeof(Pedido));
     if (!ptr_p) return NULL;
@@ -113,7 +113,8 @@ void alterarValor(Pedido* ptr_p, double novoValor) {
     ptr_p->valor = novoValor;
 }
 
-void imprimirPedido(const Pedido* ptr_p) {
+void imprimirPedido(void* dado) {
+    Pedido* ptr_p = (Pedido*) dado;
     if (!ptr_p) {
         printf("Pedido nulo.\n");
         return;
