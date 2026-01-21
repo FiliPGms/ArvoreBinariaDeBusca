@@ -2,20 +2,29 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <ctype.h>
 
 #define QTD_REGISTROS 10000
-#define ARQUIVO_SAIDA "pedidos.txt" // adapte o nome do arquivo conforme necessário
+#define ARQUIVO_SAIDA "pedidos.txt"
 
-
-// Bancos de palavras para gerar nomes aleatórios
-// adapter para ter as informações necessárias de acordo com o seu TAD 
+// Bancos para nomeCliente
 const char *nomes[] = {"Ana", "Bruno", "Carlos", "Diana", "Eduardo", "Fernanda", "Gustavo", "Helena", "Igor", "Julia", "Lucas", "Mariana", "Nicolas", "Olivia", "Pedro"};
 const char *sobrenomes[] = {"Silva", "Santos", "Oliveira", "Souza", "Rodrigues", "Ferreira", "Almeida", "Costa", "Pereira", "Lima", "Gomes", "Martins"};
-const char *dominios[] = {"gmail.com", "hotmail.com", "yahoo.com", "outlook.com", "uol.com.br", "tech.com"};
 
-// Função auxiliar para embaralhar o vetor de IDs (Fisher-Yates Shuffle)
-// Isso garante que os IDs sejam únicos e aleatórios para balancear sua árvore
+// Banco para nomePedido
+const char *itens_cardapio[] = {
+    "X-Bacon Artesanal", "Pizza Calabresa", "Suco de Laranja", "Refrigerante Lata",
+    "Batata Frita Grande", "Hamburguer Vegano", "Salada Cesar", "Pastel de Queijo",
+    "Acai 500ml", "Milkshake Morango", "Sanduiche Natural", "Agua Mineral"
+};
+
+// Banco para observacao
+const char *lista_observacoes[] = {
+    "Sem cebola", "Bem passado", "Sem gelo", "Para viagem",
+    "Adicionar maionese", "Cortar ao meio", "Pouco sal", "Mal passado",
+    "Sem observacoes", "Molho a parte", "Extra bacon", "Sem observacoes"
+};
+
+// Embaralhar o vetor de IDs
 void embaralhar_ids(int *vetor, int n) {
     for (int i = n - 1; i > 0; i--) {
         int j = rand() % (i + 1);
@@ -25,23 +34,12 @@ void embaralhar_ids(int *vetor, int n) {
     }
 }
 
-// Função para converter string para minúsculo (para o email)
-void str_lower(char *dest, const char *src) {
-    int i = 0;
-    while(src[i]) {
-        dest[i] = tolower(src[i]);
-        i++;
-    }
-    dest[i] = '\0';
-}
-
 int main() {
-    printf("Iniciando geracao de %d registros...\n", QTD_REGISTROS);
-    
-    // Inicializa semente do random
+    printf("Iniciando geracao de %d pedidos...\n", QTD_REGISTROS);
+
     srand(time(NULL));
 
-    // 1. Criar e preencher o array de IDs
+    //Criar e embaralhar IDs 
     int *ids = (int*) malloc(QTD_REGISTROS * sizeof(int));
     if (ids == NULL) {
         printf("Erro de memoria!\n");
@@ -49,14 +47,13 @@ int main() {
     }
 
     for (int i = 0; i < QTD_REGISTROS; i++) {
-        ids[i] = i + 1; // IDs de 1 a 10000
+        ids[i] = i + 1;
     }
 
-    // 2. Embaralhar os IDs para evitar Árvore Degenerada
-    printf("Embaralhando IDs...\n");
+    printf("Embaralhando IDs para garantir arvore balanceada...\n");
     embaralhar_ids(ids, QTD_REGISTROS);
 
-    // 3. Abrir arquivo para escrita
+    // Abrir arquivo
     FILE *f = fopen(ARQUIVO_SAIDA, "w");
     if (f == NULL) {
         printf("Erro ao criar arquivo!\n");
@@ -64,39 +61,38 @@ int main() {
         return 1;
     }
 
-    // 4. Gerar nomes e emails e gravar no arquivo
-    char nome_completo[100];
-    char email[150];
-    char nome_lower[50], sobrenome_lower[50];
+    // Loop de Geração
+    char nome_cliente[100];
 
-    int total_nomes = sizeof(nomes) / sizeof(nomes[0]);
-    int total_sobrenomes = sizeof(sobrenomes) / sizeof(sobrenomes[0]);
-    int total_dominios = sizeof(dominios) / sizeof(dominios[0]);
+    // Calcula tamanho dos vetores para usar no rand
+    int t_nomes = sizeof(nomes) / sizeof(nomes[0]);
+    int t_sobrenomes = sizeof(sobrenomes) / sizeof(sobrenomes[0]);
+    int t_itens = sizeof(itens_cardapio) / sizeof(itens_cardapio[0]);
+    int t_obs = sizeof(lista_observacoes) / sizeof(lista_observacoes[0]);
 
     for (int i = 0; i < QTD_REGISTROS; i++) {
-        // Escolhe partes aleatórias
-        const char *n = nomes[rand() % total_nomes];
-        const char *s = sobrenomes[rand() % total_sobrenomes];
-        const char *d = dominios[rand() % total_dominios];
+        // Gerar Nome Cliente
+        const char *n = nomes[rand() % t_nomes];
+        const char *s = sobrenomes[rand() % t_sobrenomes];
+        sprintf(nome_cliente, "%s %s", n, s);
 
-        // Formata Nome
-        sprintf(nome_completo, "%s %s", n, s);
+        // Escolher Item e Observação
+        const char *item = itens_cardapio[rand() % t_itens];
+        const char *obs = lista_observacoes[rand() % t_obs];
 
-        // Formata Email (ex: bruno.silva@gmail.com)
-        str_lower(nome_lower, n);
-        str_lower(sobrenome_lower, s);
-        sprintf(email, "%s.%s@%s", nome_lower, sobrenome_lower, d);
+        // Gerar Valor (entre R$ 10.00 e R$ 100.00)
+        double valor = (rand() % 9000) / 100.0 + 10.0;
 
-        // Escreve no arquivo: ID;Nome;Email
-        fprintf(f, "%d;%s;%s\n", ids[i], nome_completo, email);
+        // Escreve no arquivo separado por ponto e vírgula
+        fprintf(f, "%d;%s;%s;%s;%.2f\n", ids[i], nome_cliente, item, obs, valor);
     }
 
     // Limpeza
     fclose(f);
     free(ids);
 
-    printf("Sucesso! Arquivo '%s' gerado com %d linhas.\n", ARQUIVO_SAIDA, QTD_REGISTROS);
-    printf("Exemplo da primeira linha gerada (ID aleatorio): ID %d\n", ids[0]);
+    printf("Sucesso! Arquivo '%s' gerado.\n", ARQUIVO_SAIDA);
+    printf("Formato das linhas: ID;NomeCliente;NomePedido;Observacao;Valor\n");
 
     return 0;
 }
