@@ -6,13 +6,13 @@ typedef struct t_lista Lista;
 Lista* criarLista();
 void liberarLista(Lista* ptr_l);
 
-int inserir(Lista* ptr_l, void* dado);
-int remover(Lista* ptr_l, int posicao);
-void* obter(Lista* ptr_l, int posicao);
+int inserirDado(Lista* ptr_l, void* dado);
+int removerDado(Lista* ptr_l, int posicao);
+void* obterDado(Lista* ptr_l, int posicao);
 
-int cheia(Lista* ptr_l);
-int vazia(Lista* ptr_l);
-int quantidade(Lista* ptr_l);
+int listaCheia(Lista* ptr_l);
+int listaVazia(Lista* ptr_l);
+int quantidadeItens(Lista* ptr_l);
 
 void imprimirLista(Lista* ptr_l, void (*imprimir_dado)(void* dado));
 void* mostraAnterior(Lista* ptr_l, int posicao);

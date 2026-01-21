@@ -37,7 +37,7 @@ void liberarLista(Lista* ptr_l){
     free(ptr_l);
 }
 
-int inserir(Lista* prt_l, void*dado){
+int inserirDado(Lista* prt_l, void*dado){
     No* novo_no = (No*)malloc(sizeof(No));
     if(novo_no == NULL) return 0;
     novo_no->dado = dado;
@@ -56,7 +56,7 @@ int inserir(Lista* prt_l, void*dado){
     return 1;
 }
 
-int remover(Lista* ptr_l, int posicao){
+int removerDado(Lista* ptr_l, int posicao){
     if(ptr_l == NULL) return 0;
     if(posicao<0 || posicao >= ptr_l->qtd) return 0;
     No* atual = ptr_l->primeiro;
@@ -81,7 +81,7 @@ int remover(Lista* ptr_l, int posicao){
     return 1;
 }
 
-void* obter(Lista* ptr_l, int posicao){
+void* obterDado(Lista* ptr_l, int posicao){
     if(ptr_l == NULL){
         printf("lista vazia!");
     }
@@ -94,15 +94,15 @@ void* obter(Lista* ptr_l, int posicao){
     return atual->dado;
 }
 
-int cheia(Lista* ptr_l){
+int listaCheia(Lista* ptr_l){
      return 0;
 }
 
-int vazia(Lista* ptr_l){
+int listaVazia(Lista* ptr_l){
     if(ptr_l == NULL) return 1;
 }
 
-int quantidade(Lista* ptr_l){
+int quantidadeItens(Lista* ptr_l){
     if(ptr_l == NULL) return 0;
     return ptr_l->qtd;
 }

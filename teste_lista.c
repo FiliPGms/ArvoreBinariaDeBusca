@@ -30,14 +30,14 @@ int main(){
         28.00
     );
 
-    inserir(listaPedidos, p1);
-    inserir(listaPedidos, p2);
-    inserir(listaPedidos, p3);
+    inserirDado(listaPedidos, p1);
+    inserirDado(listaPedidos, p2);
+    inserirDado(listaPedidos, p3);
 
     printf("\n--- Lista de pedidos após inserção ---\n");
     imprimirLista(listaPedidos, imprimirPedido);
 
-    printf("\nQuantidade de pedidos na lista: %d\n", quantidade(listaPedidos));
+    printf("\nQuantidade de pedidos na lista: %d\n", quantidadeItens(listaPedidos));
 
     printf("\nMonstrando Anterior:\n");
     Pedido* ant1 = (Pedido*) mostraAnterior(listaPedidos, 1);
@@ -47,18 +47,18 @@ int main(){
     if (ant2) imprimirPedido(ant2);
 
     printf("\nTeste de busca:\n");
-    for(int i = 0; i < quantidade(listaPedidos); i++){
+    for(int i = 0; i < quantidadeItens(listaPedidos); i++){
         Pedido* p = (Pedido*) obter(listaPedidos, i);
         if(p) imprimirPedido(p);
     }
 
     
     printf("\nRemovendo pedidos...\n");
-    while (!vazia(listaPedidos)) {
-        remover(listaPedidos, 0);
+    while (!listaVazia(listaPedidos)) {
+        removerDado(listaPedidos, 0);
     }
     
-    if(vazia(listaPedidos)){
+    if(listaVazia(listaPedidos)){
         printf("lista vazia");
     }
 
